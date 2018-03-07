@@ -16,6 +16,7 @@ const {Writable}         = require('stream');
 const bunyan             = require('bunyan');
 const colors             = require('colors/safe');
 const exceptionFormatter = require('exception-formatter');
+var jsome = require('jsome');
 
 const {srcToString, applyColors, dateToString, isString} = require('./utils');
 
@@ -139,7 +140,6 @@ class BunyanDebugStream extends Writable {
 
         // Initialize some defaults
         this._prefixers = this.options.prefixers != null ? this.options.prefixers : {};
-        this._out = this.options.out != null ? this.options.out : process.stdout;
         this._basepath = this.options.basepath != null ? this.options.basepath : process.cwd();
         this._indent = this.options.indent != null ? this.options.indent : "  ";
 
@@ -241,22 +241,13 @@ class BunyanDebugStream extends Writable {
             }
         }
 
+
+        const json = {};
         // Use JSON.stringify on whatever is left
         for (key in entry) {
             // Skip fields we don't care about
-            value = entry[key];
             if (consumed[key]) { continue; }
-
-            let valueString = JSON.stringify(value);
-            if (valueString != null) {
-                // Make sure value isn't too long.
-                const cols = process.stdout.columns;
-                const start = `${this._indent}${key}: `;
-                if (cols && ((valueString.length + start.length) >= cols)) {
-                    valueString = valueString.slice(0, (cols - 3 - start.length)) + "...";
-                }
-                values.push(`${start}${valueString}`);
-            }
+            json[key] = value;
         }
 
         prefixes = prefixes.length > 0 ? `[${prefixes.join(',')}] ` : '';
@@ -275,11 +266,12 @@ ${date}${processStr}${levelPrefix}${src}${prefixes}${applyColors(message, colors
 
         if (typeof request !== 'undefined' && request !== null) { line += `\n${this._indent}${request}`; }
         if (values.length > 0) { line += `\n${values.map(v => applyColors(v, colorsToApply)).join('\n')}`; }
-        return line;
+        return {line, json};
     }
 
     _write(entry, encoding, done) {
-        this._out.write(this._entryToString(entry) + "\n");
+        process.stdout.write(this._entryToString(entry.line) + "\n");
+        jsome(entry.json)
         return done();
     }
 }

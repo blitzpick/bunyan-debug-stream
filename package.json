@@ -33,7 +33,6 @@
   },
   "main": "./lib/BunyanDebugStream.js",
   "scripts": {
-    "prepublish": "coffee -c -o lib src",
     "test": "mocha && istanbul report text-summary lcov"
   },
   "engines": {

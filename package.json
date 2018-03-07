@@ -17,8 +17,7 @@
   },
   "dependencies": {
     "colors": "^1.0.3",
-    "exception-formatter": "^1.0.4",
-    "jsome": "2.5.0"
+    "exception-formatter": "^1.0.4"
   },
   "devDependencies": {
     "chai": "^1.10.0",
@@ -27,13 +26,15 @@
     "coveralls": "^2.11.2",
     "istanbul": "^0.3.16",
     "longjohn": "^0.2.4",
-    "mocha": "^2.1.0"
+    "mocha": "^2.1.0",
+    "jsome": "2.5.0"
   },
   "peerDependencies": {
     "bunyan": "*"
   },
   "main": "./lib/BunyanDebugStream.js",
   "scripts": {
+    "prepublish": "coffee -c -o lib src",
     "test": "mocha && istanbul report text-summary lcov"
   },
   "engines": {

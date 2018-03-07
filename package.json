@@ -32,7 +32,7 @@
   "peerDependencies": {
     "bunyan": "*"
   },
-  "main": "./lib/BunyanDebugStream.js",
+  "main": "./src/BunyanDebugStream.js",
   "scripts": {
     "prepublish": "coffee -c -o lib src",
     "test": "mocha && istanbul report text-summary lcov"

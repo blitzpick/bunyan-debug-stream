@@ -325,7 +325,7 @@ ${values.map(v => applyColors(v, colorsToApply)).join('\n')}`;
     if (Object.getOwnPropertyNames(unconsumed).length !== 0) {
       line += jsome.getColoredString(unconsumed);
     }
-    return line
+    return line;
   }
 
   _write(entry, encoding, done) {
